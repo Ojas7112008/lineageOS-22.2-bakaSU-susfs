@@ -13,7 +13,7 @@ import subprocess
 import tempfile
 from test_selinux_adapter import function, run, digest
 
-PIN = "e1682a2831142e68fa30bab97d5690cf90b75119"
+PIN = "f308ed0936bdd31163cb53da3f42bc7a698f5512"
 MACRO = "KSU_COMPAT_DEVON_SELINUX_POLICY"
 PATCH_FILES = ["kernel/Kbuild", "kernel/Kconfig", "kernel/feature/selinux_hide.c",
                "kernel/feature/selinux_hide.h", "kernel/selinux/rules.c",

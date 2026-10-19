@@ -1,5 +1,5 @@
 diff --git a/kernel/Kbuild b/kernel/Kbuild
-index b7655cb..e5de36f 100644
+index b7655cb..f755882 100644
 --- a/kernel/Kbuild
 +++ b/kernel/Kbuild
 @@ -146,6 +146,19 @@ ifeq ($(CONFIG_KSU),y)
@@ -102,7 +102,7 @@ index 15e3410..84aff0f 100644
  bool allow_shell = true;
  #else
 diff --git a/kernel/feature/selinux_hide.c b/kernel/feature/selinux_hide.c
-index 549c42a..422899f 100644
+index 756fd5e..cb95e3e 100644
 --- a/kernel/feature/selinux_hide.c
 +++ b/kernel/feature/selinux_hide.c
 @@ -46,6 +46,15 @@
@@ -324,7 +324,7 @@ index 549c42a..422899f 100644
          sel_open_handle_status_slot = &ops->open;
      }
      sel_open_handle_status_fn new_fn = my_sel_open_handle_status;
-@@ -784,6 +927,10 @@ static int ksu_selinux_hide_enable()
+@@ -774,6 +917,10 @@ static int ksu_selinux_hide_enable()
      pr_info("selinux_hide: context_write: 0x%lx [%pSb]\n", (unsigned long)*context_write, *context_write);
      write_op_fn my = my_write_context;
      orig_context_write = *context_write;
@@ -335,7 +335,7 @@ index 549c42a..422899f 100644
      ret = ksu_patch_text(context_write, &my, sizeof(my), KSU_PATCH_TEXT_FLUSH_DCACHE);
      if (ret) {
          pr_err("selinux_hide: init: patch_text context_write err: %d\n", ret);
-@@ -794,6 +941,10 @@ static int ksu_selinux_hide_enable()
+@@ -784,6 +931,10 @@ static int ksu_selinux_hide_enable()
      pr_info("selinux_hide: access_write: 0x%lx [%pSb]\n", (unsigned long)*access_write, *access_write);
      my = my_write_access;
      orig_access_write = *access_write;
@@ -346,7 +346,7 @@ index 549c42a..422899f 100644
      ret = ksu_patch_text(access_write, &my, sizeof(my), KSU_PATCH_TEXT_FLUSH_DCACHE);
      if (ret) {
          pr_err("selinux_hide: init: patch_text access_write err: %d\n", ret);
-@@ -826,6 +977,10 @@ static int ksu_selinux_hide_enable()
+@@ -816,6 +967,10 @@ static int ksu_selinux_hide_enable()
  #endif // #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
          selinux_setprocattr_hook_ptr = (unsigned long)&hp->hook.setprocattr;
          ksu_orig_setprocattr = hp->hook.setprocattr;
@@ -357,7 +357,7 @@ index 549c42a..422899f 100644
          setprocattr_fn my_setprocattr = ksu_handle_selinux_setprocattr;
          ret =
              ksu_patch_text(&hp->hook.setprocattr, &my_setprocattr, sizeof(my_setprocattr), KSU_PATCH_TEXT_FLUSH_DCACHE);
-@@ -954,11 +1109,24 @@ void __exit ksu_selinux_hide_exit()
+@@ -944,11 +1099,24 @@ void __exit ksu_selinux_hide_exit()
      }
      mutex_unlock(&selinux_hide_mutex);
      ksu_unregister_feature_handler(KSU_FEATURE_SELINUX_HIDE);
@@ -383,7 +383,7 @@ index 549c42a..422899f 100644
  }
  
  void ksu_selinux_hide_drop_backup_if_unused()
-@@ -1229,9 +1397,11 @@ static inline void ksu_unlock_sepolicy_legacy(void)
+@@ -1219,9 +1387,11 @@ static inline void ksu_unlock_sepolicy_legacy(void)
  #endif
  }
  
@@ -397,7 +397,7 @@ index 549c42a..422899f 100644
  #else
  static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct sidtab *orig_sidtab,
                                         struct policydb *policydb, struct sidtab *sidtab, const char *scontext,
-@@ -1247,7 +1417,14 @@ static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct si
+@@ -1237,7 +1407,14 @@ static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct si
      char *scontext2, *scontext3, *str = NULL;
      struct context context, orig_context;
      int rc = 0, orig_rc = 0;
@@ -413,7 +413,7 @@ index 549c42a..422899f 100644
  
      /* An empty security context is never valid. */
      if (!scontext_len)
-@@ -1255,19 +1432,21 @@ static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct si
+@@ -1245,19 +1422,21 @@ static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct si
  
      /* Copy the string to allow changes and ensure a NUL terminator */
      scontext2 = kmemdup_nul(scontext, scontext_len, gfp_flags);
@@ -439,7 +439,7 @@ index 549c42a..422899f 100644
  
          // removed: if (force)
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0) || defined(KSU_COMPAT_HAS_SELINUX_POLICY_STRUCT)
-@@ -1279,22 +1458,37 @@ static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct si
+@@ -1269,22 +1448,37 @@ static int ksu_security_context_to_sid(struct policydb *orig_policydb, struct si
      sidtab = policy->sidtab;
  #else
      ksu_lock_sepolicy_legacy();
@@ -481,9 +481,9 @@ index 549c42a..422899f 100644
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0) || defined(KSU_COMPAT_HAS_SELINUX_POLICY_STRUCT)
      rcu_read_unlock();
  #else
-@@ -2439,3 +2633,16 @@ allow:
+@@ -1821,3 +2015,16 @@ allow:
+     goto out;
  }
- #endif
  #endif
 +
 +#ifdef KSU_COMPAT_DEVON_SELINUX_POLICY

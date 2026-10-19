@@ -3,15 +3,15 @@
   "scope": "LineageOS 22.2 BakaSU/SUSFS 2.3.0 and NoMount; Droidspaces excluded; no boot/runtime validation",
   "kernel_base": "6ee566fa01247d9c4c222601c2bd99534f9d66f9",
   "protected_ref": "80f0ee4d1ec68838d25c2efeb955d31e90f85dae",
-  "bakasu_commit": "e1682a2831142e68fa30bab97d5690cf90b75119",
+  "bakasu_commit": "f308ed0936bdd31163cb53da3f42bc7a698f5512",
   "bakasu_url": "https://github.com/Baka-SU/BakaSU.git",
   "susfs_reference": "82f08351fadb8b19dd6591bd14634d02ad832145",
   "provider_patch": ".github/patches/bakasu-devon-selinux-policy.patch",
-  "provider_sha256": "d75748e5d0a054d7ac49e56b7218f1d44ec4c6ed7ed091088469c40f7e78493c",
+  "provider_sha256": "52a33f2e409aacbdbf4890545dc34129654411aace618badab73014b4fd23c2c",
   "provider_files": {
     "kernel/Kbuild": "306e94c3efd14e11d31288950c12e5b4fbf51a66eab0a44bbe5b4506d83a5b11",
     "kernel/Kconfig": "ee2ec621e3a6011bae159ca6b86ce9d82a251ecf4861dc64f88599d21e3b10f5",
-    "kernel/feature/selinux_hide.c": "8efd5d9c0e0343fccb807691b385e673affbafe13c5daac9211d38fcf1b96ee8",
+    "kernel/feature/selinux_hide.c": "99b1b7349aa9582d5e8646505c7ce70a17a26b2c197808a543febfdd9b2ea18f",
     "kernel/feature/selinux_hide.h": "63bfe72ea86c044367f0f074cc20111fbdfe001d7b2331d712415758a09139ae",
     "kernel/selinux/rules.c": "1851263d0730958db7e7a0460581d59736977c831389e466b65b98b5e064be54",
     "kernel/selinux/selinux.h": "43c93d183fd391ada62c3ef3f19e2a37b5d605983eddfb674bd5e2e9295fc81b",
@@ -26,7 +26,7 @@
     "kernel/feature/sucompat.c": "7f14a39e4ff5d24cb65004b294e34af8623283f0ea54e57bb9a83facc629eb43",
     "kernel/feature/sucompat.h": "38bc2330827d62f31b7d1f9d508b6f8b5684cd9d627957b4e20342e1c0d7083c"
   },
-  "dependency_directory": ".backport-context/build/bakasu-core-e1682a2831142e68fa30bab97d5690cf90b75119-d75748e5d0a0",
+  "dependency_directory": ".backport-context/build/bakasu-core-f308ed0936bdd31163cb53da3f42bc7a698f5512-52a33f2e409a",
   "kernel_files": {
     "drivers/Kconfig": "f3b26602ca9683742a53081fbc97d451d6698e6c47a4cb083e0d8075264258a1",
     "drivers/Makefile": "ef49cc0fb240ddf580c0e0dc102f4c3a6abe2a99feee4491cef79ed26ea8403d",

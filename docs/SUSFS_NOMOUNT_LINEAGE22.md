@@ -9,7 +9,7 @@ correct active hiding/redirection rules.
 | Component | Source |
 | --- | --- |
 | Official LineageOS 22.2 kernel | `6ee566fa01247d9c4c222601c2bd99534f9d66f9` |
-| BakaSU SUSFS provider | Official `sync-susfs` commit `e1682a2831142e68fa30bab97d5690cf90b75119`, plus the existing reviewed 16-file 4.19 provider patch |
+| BakaSU SUSFS provider | Official `sync-susfs` commit `f308ed0936bdd31163cb53da3f42bc7a698f5512`, plus the rebased 16-file 4.19 provider patch |
 | SUSFS reference | `82f08351fadb8b19dd6591bd14634d02ad832145`, actual v2.3.0 |
 | Reviewed SUSFS kernel port | The 55-file committed integration in the local 23.2 tree at `076d737f4086`, including the mount ABI repair |
 | NoMount | `7046c7ad3ee0bf4ae66e80f6b93b1e30db0cb4e3`, plus the independently pinned 4.19 adaptation |
@@ -20,7 +20,7 @@ restriction. Its source/submodule remains intact. The SUSFS build selects a
 separate pinned provider through `drivers/kernelsu`; it does not remove that
 restriction, edit the provider's compatibility fragment, falsify a version or
 pretend this is still the same BakaSU revision. Native history-derived version
-for the selected provider is 35229, `v4.2.0-rc3-e1682a28-dirty` (the dirty
+for the selected provider is 35233, `v4.2.0-rc3-f308ed09-dirty` (the dirty
 suffix records the reviewed provider patch).
 
 ## Port boundaries
@@ -148,3 +148,26 @@ certificate. It reports zero freshly verified original module binaries when
 those binaries are unavailable on the runner. The local checkpoint above
 cryptographically verified all 66 original module files; the signed-module
 inventory is bound to the ABI inventory by their file checksums.
+
+## BakaSU provider update — 2026-10-19
+
+The provider advances four commits from the first validated revision
+`e1682a28` to `f308ed09` on the official `sync-susfs` branch. The upstream
+change affects only `kernel/feature/selinux_hide.c`, chiefly removing the
+separate Linux 6.6 implementation. Our final policy-lock helper hunk is rebased
+onto the new file ending. The other 15 adapted files remain byte-identical.
+
+Both patched SELinux implementations were preprocessed with the previous
+build's actual ARM64 Clang command and native 4.19 configuration. With only
+source path metadata normalized, the active code is byte-identical. The
+upstream non-GKI rejection, compatibility fragments and version calculation
+remain intact. The new full-history revision count is 4533, giving the native
+version code 35233; the upstream release tag remains `v4.2.0-rc3`.
+
+The previous provider checkout, build evidence and first Actions boot image
+are retained locally. Source commit `0ab64859069b` is the previous successful
+workflow checkpoint. A fresh local Image, 66 modules and four device trees
+build successfully with the updated provider. All 12,489 baseline exports,
+4,306 original imports, 66 original module signatures, native hook calls and
+20 maintained host suites pass. Cloud validation is recorded in the Actions
+run; boot and rule testing remain separate.

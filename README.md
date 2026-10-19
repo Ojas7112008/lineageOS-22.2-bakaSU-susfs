@@ -3,7 +3,7 @@
 Kernel for Motorola Moto G32 (`devon`), based on official LineageOS 22.2
 commit `6ee566fa01247d9c4c222601c2bd99534f9d66f9`.
 
-- BakaSU's SUSFS-supported revision `e1682a28` (native version 35229), with
+- BakaSU's SUSFS-supported revision `f308ed09` (native version 35233), with
   the reviewed 4.19 provider patch and compatibility checks retained.
 - SUSFS 2.3.0: all eight selected features; AVC-log spoofing remains unsupported.
 - Built-in NoMount; no Droidspaces changes.
