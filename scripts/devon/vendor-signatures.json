@@ -1,0 +1,345 @@
+{
+  "schema": 1,
+  "rom": "lineage-22.2-20251011-nightly-devon",
+  "original_boot_sha256": "1ef066a7db9dcf1844d573c36693ed115ce8cfbd31505b126c38d32f1137033d",
+  "original_kernel_sha256": "c3b9751a90ce7123dcba34603fbdcba2b8164cc729864391c3ea0ec6a33dd6bc",
+  "certificate": {
+    "path": "certs/devon-lineage22.2-vendor.pem",
+    "pem_sha256": "5d72618f42ce1f8f8eae20c13bcf956fe8d6319ebcf3f003ceb7c6219a96bc85",
+    "der_sha256": "924df2f194d7b37aa051e43b2c4530e1429e00be2444479956383c1c804637fe",
+    "serial": "08EE30F0885A7C4A691567E61A72A3A81DC9F20C"
+  },
+  "verification": "All 66 SHA-pinned original modules verified with OpenSSL CMS against the public trust anchor recovered from the SHA-pinned original kernel. Rebuilt generated-key negative control fails.",
+  "modules": [
+    {
+      "module": "adapter_class.ko",
+      "sha256": "e70172eb82253f9567d525a0dc6ca2f9c48fa25c028ccdd5e773b23ef6577580",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_adsp_loader.ko",
+      "sha256": "768a2a6ad14304cefb3d66127fddddfa0891d391ae3dc134ff2002c877cd6580",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_apr.ko",
+      "sha256": "79ef21fc3c735434d595bb41ae46852abe0853c2813dd92d53b550aaba72d8db",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_bolero_cdc.ko",
+      "sha256": "101ec7f78b64a3ef5d81d28fa91e4880d07c938611b8461a0c7689ff63f0202e",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_machine_bengal.ko",
+      "sha256": "0804f36907100976ff81b82272314253da88b7a87d1f36a2bf52a7857513b177",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_mbhc.ko",
+      "sha256": "789da1ec294f36146bd9e3624886e90f022d416a61cdf0916bfb0b92095274d1",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_native.ko",
+      "sha256": "e840d638b449631ac69e74ca8d181b8d760e8208380656540370a2529a0d42d7",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_pinctrl_lpi.ko",
+      "sha256": "bac3a6b0a7596900f10bde862866dbe28f03bff8efd42e64436a26369480038b",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_platform.ko",
+      "sha256": "d3e776aac1286511861296c82107f20f2e9e833079715bdaab300516d4a004d4",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_pm2250_spmi.ko",
+      "sha256": "e7aa5a33522e3e4e3d9d2b8b23c17cda3a0a13a8fc71aba53b4f5ed3c7209254",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_q6.ko",
+      "sha256": "e6be23b6f7cb6d3134ea683738cdb81fa64806fdd43175116492b00a52a9ebdb",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_q6_notifier.ko",
+      "sha256": "f6423d4bb5c0647c4c42e77232ce74f0ed3cb06a3367fb4301e7b68dd9b16353",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_q6_pdr.ko",
+      "sha256": "0fb94f3a7188978689118d5c7517eb508c743c4d4727654ab1081ed33c7a009c",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_rouleur.ko",
+      "sha256": "d1d3fe0fdb0ce9887e8a2d04706ecf60cc8d3e249163534585cfec3450e0fbbb",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_rouleur_slave.ko",
+      "sha256": "49a6b734c653305301d2b426b0810795b424f7a739271d92aeed90aff22e35b2",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_rx_macro.ko",
+      "sha256": "9a3ebe76dec4b1aea59bd0087c86b42190c6720d5a998f18378ecfd5f9978734",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_snd_event.ko",
+      "sha256": "de2310e21ab5c84e96910843540451dc31b40fbf6c3d530d08c7972325406ad7",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_snd_soc_aw882xx.ko",
+      "sha256": "423abb52aed1d63cbdd5c7d852756166f7ae3e7b39d2d7adca1221c01abbdb24",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_stub.ko",
+      "sha256": "b2db71f2ef8d5eeedd1644da1428de779b4a61212e913ab102a4548fb9753f3c",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_swr.ko",
+      "sha256": "b284b5b42a421f5179f5f67370b521ff067c9129dee64829abbd4a087925dcf3",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_swr_ctrl.ko",
+      "sha256": "efad4918d39b7e2a07f1aec19576229e82617998594f87365be7b889d1781823",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_tx_macro.ko",
+      "sha256": "5b4e3d3c06dc66bda53ecefb68add745e582be8de712ba565d86c488961290bc",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_usf.ko",
+      "sha256": "dbdb7952de06735c89c29dab0ebcf200ceacd3ae1c19ea063a95bd991e0af16a",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_va_macro.ko",
+      "sha256": "5846860337ed9c4fc6c43b2ebad4d426dcd5fd9d72d9cfd448bbbfac144233c7",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_wcd937x.ko",
+      "sha256": "1f39d1d60df2ffe37240425bebfea9e59121924ac7267c885c9350166be7e2db",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_wcd937x_slave.ko",
+      "sha256": "fd8b0205334cca691c0db3680642b1830bd01a50c9dcf233e2424734f8a0eaea",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_wcd9xxx.ko",
+      "sha256": "d125ed24bbd3187155de270100be3f46a0f3f086bdc4cbcbe6b27d30a66ccc48",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_wcd_core.ko",
+      "sha256": "6629426689a52c299a7298fbadec93efebb53fa4a8310aa7d28f38895cf26f0e",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "audio_wsa881x_analog.ko",
+      "sha256": "ca19da410e5d7f33edc1d6db348f9e11a324cf4a25097b58b7217ba1ee5fffd4",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "aw9610x.ko",
+      "sha256": "79ca2bed58d6ab53300ed3e5bdd9b613c8a7334e26576c59ca14e9927787a35e",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "bq2597x_mmi_iio.ko",
+      "sha256": "c1a60fdd35825bb7df2445958c89d1eea854d17adc21d9d29905c61682ac4294",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "cci_intf.ko",
+      "sha256": "145ec9cbf5c0e58bfca3035c2c8699d35106e691cd90cc92600c61e8bd1ccf05",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "cw2217b_fg_mmi.ko",
+      "sha256": "9937e0b73d07e657f81f430508248670005163d488b8365757fac21953775e1b",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "ets_bix_mmi.ko",
+      "sha256": "d1fa3b952d7779487506030e575ccbe463c0de71871b4daf7878dbf8d32585e3",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "exfat.ko",
+      "sha256": "e75d8a52f10ef40cc8f354118f10887f927141d57a29639de2f2d58187fe0933",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "focaltech_0flash_v2_mmi.ko",
+      "sha256": "16ca6a97f5ab51e32618f77d31e574e3bbf36eda566b31f8e4d9e40338b0d4c8",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "fpc1020_mmi.ko",
+      "sha256": "648e3cc4ee54180a905e913fcc0838b6e21903cb8593260f9e31210335d4f7e1",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "ili9882_mmi.ko",
+      "sha256": "d45bad90e09e2a4768b247218f65301c90b1d88bdc623f085853bf3bfe09501c",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "ldo_vibrator_mmi.ko",
+      "sha256": "912054647cf4e710a0860d90e90a099041899e7ef0ad80e64b98450932c3af9b",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "leds-indicator-pwm.ko",
+      "sha256": "f2b3884b865f1534dffbea7e2342daeee91f9ba1d3068af199cb603ff2cf40fe",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "leds_aw99703.ko",
+      "sha256": "1f12e28c925821811a10cf4d17e8d07ba67e073adadc6b0cfd6fa929f23ce4d6",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "leds_lm3697.ko",
+      "sha256": "8d16bad58ce4a71e531a4e001564d54587089a7407d5fcbb51edf26637f26d6d",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_annotate.ko",
+      "sha256": "52903e4a8aa1948f81563028738e1abff595bf9270ec3f6a6bf3c7aa56500a9a",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_charger.ko",
+      "sha256": "517f9a4b0fe949252ef6e00915bb4cb152ee23202eb9b084183447d928df06a0",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_discrete_charger.ko",
+      "sha256": "b6fc9a996c1d2a50c2b6bb8e7ba0ebb07b380d817a57e440139f17344f911157",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_discrete_charger_class.ko",
+      "sha256": "8abdcbc71bca3ea647685eda755bb14008a6ddc4830eb5f6e1ef2acccc2e5e94",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_discrete_turbo_charger.ko",
+      "sha256": "3a66e054961358b8931527ed6b40db0e5f7c5d8224e5437556d3a79ade5cbecd",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_info.ko",
+      "sha256": "b8aa5b040263e56c33d1e161666c0f7865dc72001674282f23ebc7ffa301cc80",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_qc3p_wt6670f.ko",
+      "sha256": "7705b4f855f9942081541c5838e380f869f9e094719ce0e9c3e7752cb5da0e5c",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "mmi_sys_temp.ko",
+      "sha256": "1eeeb0df6531d85bf44a40e4038c5cb38178706c48dc93c8f6b03b594285dc72",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "nova_0flash_mmi.ko",
+      "sha256": "d1ffe28be7c2690aaa752527811a50463b5410bf16fc0669c9cb4304771b2bb9",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "qca_cld3_wlan.ko",
+      "sha256": "fadeb9729debb018d2debc584c375ff240b8e51981d45ca52b01cc2c6076e3e4",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "qpnp-power-on-mmi.ko",
+      "sha256": "536d9453aeedbc1e88586b51ca23d088ee8501241cea5a614f860f0fbbd14771",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "qpnp_adaptive_charge.ko",
+      "sha256": "2935857c8b20caf40d3575313e4d75196ff96e2b66ecbb48c83dff26f8feb948",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "regulator_vibrator_mmi.ko",
+      "sha256": "c3c2a4221c9f74eced37b935a62e3c3ea29751dc9ed3bdfb945f3449d5369aa8",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "rt9471_charger.ko",
+      "sha256": "a6e6c2170775dfa6c8c8eb63241f719b67dbf9f6e0b8719bbf43d20c69accf07",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "rt_pd_manager.ko",
+      "sha256": "05e2727a1c2a4b0ef810c777caf573b9f78d73114fd247bc584599e960f66f75",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "sec_nfc.ko",
+      "sha256": "47e7cceba2dd5daab09ac911773b98b8afe8b9470e4c76d9cc0b977ca0a58208",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "sensors_class.ko",
+      "sha256": "7d99c3e61606187bc43a6a1c5805df5af8a6f8a5eab854d2fef0beaa7fcd392d",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "sgm4154x_charger.ko",
+      "sha256": "88fd8a704999f23f1baf0f6f5c977bb249f60558569bf28539748e2f8edab4f8",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "sm5602_fg_mmi.ko",
+      "sha256": "0a9aebc1fe2e24dd4705ebfd8d22bfb63cd04b4534ad5e3572fb2fcab13cbac6",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "st21nfc.ko",
+      "sha256": "36cd29dbcf6dd4f8be78af5f18d7d14d4ade444b7b45a5eeffb81ea282dd9298",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "tcpc_class.ko",
+      "sha256": "ad5f18c923c9112b58a702c259375fc6b42264fb27b12b00c8b0032b8acb8684",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "tcpc_sgm7220.ko",
+      "sha256": "99724c401075762f5dd087dd97ea57004a926cb55fa22355c754f5c00c2fa78d",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "utags.ko",
+      "sha256": "3039285c517de380a6ec77730a55ca4ac6e1fa8cf3ecc2c84059dc835ded2046",
+      "signature_verification": "passed"
+    },
+    {
+      "module": "wl2864c.ko",
+      "sha256": "3e588ca8ec3290897d1e2a86c21ca9d530c3a87a448f939e2991c298cfb6d9bb",
+      "signature_verification": "passed"
+    }
+  ]
+}

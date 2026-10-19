@@ -61,6 +61,7 @@
 #include <linux/pipe_fs_i.h>
 #include <linux/oom.h>
 #include <linux/compat.h>
+#include <linux/bakasu_manual.h>
 #include <linux/vmalloc.h>
 
 #include <linux/uaccess.h>
@@ -1897,12 +1898,42 @@ out_ret:
 	return retval;
 }
 
+#if defined(CONFIG_KSU_MANUAL_HOOK) || defined(CONFIG_KSU_SUSFS)
+__attribute__((hot))
+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr,
+                               void *argv, void *envp, int *flags);
+__attribute__((hot))
+extern int ksu_handle_post_execveat(int *fd, struct filename **filename_ptr,
+                                    void *argv, void *envp, int *flags,
+                                    int *retval);
+#endif
+
 static int do_execveat_common(int fd, struct filename *filename,
 			      struct user_arg_ptr argv,
 			      struct user_arg_ptr envp,
 			      int flags)
 {
+#if defined(CONFIG_KSU_MANUAL_HOOK) || defined(CONFIG_KSU_SUSFS)
+	struct filename *held_filename = NULL;
+	int retval;
+
+	if (!IS_ERR_OR_NULL(filename))
+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+	if (!IS_ERR_OR_NULL(filename)) {
+		/* __do_execve_file consumes its reference on success and failure. */
+		held_filename = filename;
+		held_filename->refcnt++;
+	}
+	retval = __do_execve_file(fd, filename, argv, envp, flags, NULL);
+	if (held_filename) {
+		ksu_handle_post_execveat(&fd, &filename, &argv, &envp, &flags,
+					&retval);
+		putname(held_filename);
+	}
+	return retval;
+#else
 	return __do_execve_file(fd, filename, argv, envp, flags, NULL);
+#endif
 }
 
 int do_execve_file(struct file *file, void *__argv, void *__envp)

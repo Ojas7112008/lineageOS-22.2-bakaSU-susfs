@@ -1,0 +1,10 @@
+{
+  "provenance": "Exact boot-tested BakaSU-only source archived before this port",
+  "archive_sha256": "334beb5ff914e96145e2332c914954ac290519739d444fa7aee700a3338e03f5",
+  "files": {
+    "fs/exec.c": "da603a28361901162886621abc22bb4216829295dde3723ba2544539456d6443",
+    "fs/open.c": "30f42f018d2728a7c0819bd37f991498244b99cc9a59f2e1115c2e698afa0501",
+    "fs/stat.c": "2f2eb8e28f694a62cafe9a9f6a848571d34bac5314cdd13e1cb93d22fa3e2be6",
+    "kernel/reboot.c": "026b8b4d76ea023c06d704d9c6dfa112bf7f57b0607e8f4b79c1fb543c7264ec"
+  }
+}

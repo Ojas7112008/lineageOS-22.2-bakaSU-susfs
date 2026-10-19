@@ -1,0 +1,8 @@
+{
+  "rom": "LineageOS 22.2, devon, 2025-10-11 nightly",
+  "url": "https://github.com/Ojas7112008/lineageOS-22.2-bakaSU-susfs/releases/download/lineage22.2-20251011-boot-base/lineage22.2-devon-20251011-original-boot.img.zst",
+  "compressed_bytes": 31574738,
+  "compressed_sha256": "ce197e742b683001f989003bef7f01be921771a31a69ca98569c3e4fce81217a",
+  "boot_bytes": 100663296,
+  "boot_sha256": "1ef066a7db9dcf1844d573c36693ed115ce8cfbd31505b126c38d32f1137033d"
+}

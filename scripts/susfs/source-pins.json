@@ -1,0 +1,18 @@
+{
+  "kernel": "6ee566fa01247d9c4c222601c2bd99534f9d66f9",
+  "bakasu": "e1682a2831142e68fa30bab97d5690cf90b75119",
+  "bakasu_upstream_branch": "sync-susfs",
+  "bakasu_status": "Pinned sync-susfs revision with reviewed 4.19 provider patch; native compatibility guards retained",
+  "bakasu_followup": "d7260ca1e5c128061122924d0d48754e361e135c",
+  "susfs": "82f08351fadb8b19dd6591bd14634d02ad832145",
+  "susfs_branch": "gki-android12-5.10",
+  "bakasu_patch": ".github/patches/bakasu-devon-selinux-policy.patch",
+  "selinux_route": "BakaSU automatic hooks; no SUSFS inline SELinux hooks",
+  "target_config": "CONFIG_KSU_DEVON_SELINUX_POLICY=y",
+  "workflow_status": "Manual LineageOS 22.2 boot-image workflow prepared; pinned original boot resource, compiler and provider; no device operation",
+  "bakasu_patch_files": 16,
+  "task_state_checkpoint": "docs/SUSFS_NOMOUNT_LINEAGE22.md",
+  "integration_status": "LineageOS 22.2 all-eight SUSFS + NoMount Image/dtbs/modules built; 20 host suites, original-driver signatures/imports and complete native export baseline passed; device/rule testing pending",
+  "core_feature_status": "All eight selectable features implemented; AVC spoof command returns EOPNOTSUPP",
+  "validation_runner": "scripts/susfs/run_host_checks.py"
+}

@@ -8,6 +8,9 @@
 
 #ifndef _FS_FUSE_I_H
 #define _FS_FUSE_I_H
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+#include <linux/susfs_fuse.h>
+#endif
 
 #include <linux/fuse.h>
 #include <linux/fs.h>
@@ -108,6 +111,9 @@ struct fuse_inode {
 
 	/** Lock for serializing lookup and readdir for back compatibility*/
 	struct mutex mutex;
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+	struct susfs_fuse_inode susfs_path;
+#endif
 };
 
 /** FUSE inode state bits */

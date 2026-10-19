@@ -1,0 +1,93 @@
+--- a/Kconfig
++++ b/Kconfig
+@@ -1,8 +1,9 @@
+ # Kconfig for NoMount
+ 
+ config NOMOUNT
+-	tristate "NoMount Path Redirection Subsystem"
+-	default y
++	bool "NoMount Path Redirection Subsystem"
++	depends on ARM64 && KEYS
++	default n
+ 	help
+ 	  NoMount allows path redirection and virtual file injection
+ 	  without mounting filesystems. Useful for systemless modifications.
+--- a/Makefile
++++ b/Makefile
+@@ -18,4 +18,4 @@
+ endif
+ 
+ obj-$(CONFIG_NOMOUNT) += nomount.o
+-ccflags-y += -std=gnu11 -Wno-declaration-after-statement -O3 -fno-stack-protector
++ccflags-y += -std=gnu11 -Wno-declaration-after-statement -O3
+--- a/nomount.c
++++ b/nomount.c
+@@ -601,7 +601,7 @@
+         stat->ino = v_inode->i_ino;
+         stat->dev = v_inode->i_sb->s_dev;
+     }
+-    
++
+     return res;
+ }
+ 
+@@ -1007,9 +1007,9 @@
+ 
+     spin_lock(&dentry->d_lock);
+     orig = dentry->d_op;
+-    if (orig == &nm_owned_dops || orig == &nm_dops || (iop && orig == &iop->fake_dops)) { 
+-        spin_unlock(&dentry->d_lock); 
+-        return; 
++    if (orig == &nm_owned_dops || orig == &nm_dops || (iop && orig == &iop->fake_dops)) {
++        spin_unlock(&dentry->d_lock);
++        return;
+     }
+ 
+     if (injected) {
+@@ -1057,7 +1057,7 @@
+             smp_store_release(&nm_sop->sb->s_op, nm_sop->orig_sop);
+             if (nm_sop->fake_xattr) {
+                 smp_store_release((const struct xattr_handler ***)&nm_sop->sb->s_xattr, nm_sop->orig_xattr);
+-                kfree(nm_sop->fake_xattr); 
++                kfree(nm_sop->fake_xattr);
+             }
+             nm_debug("Successfully cured superblock for dev: 0x%x\n", nm_sop->sb->s_dev);
+         }
+@@ -1475,7 +1475,6 @@
+     if (fresh) {
+         RCU_INIT_POINTER(leaf->rules, array);
+         if ((err = nomount_generate_virtual_topology(leaf, uid))) {
+-            mutex_unlock(&nomount_mutex);
+             for (int i = 0; i < array->count; i++)
+                 if (array->rules[i].r_path.dentry) path_put(&array->rules[i].r_path);
+             kfree(array);
+@@ -1493,8 +1492,7 @@
+ 
+ out_dir:  nm_dir_put(new_dir);
+ out_leaf: if (fresh) nm_free_leaf(leaf);
+-out_rule: mutex_unlock(&nomount_mutex);
+-          if (new_rule.r_path.dentry) path_put(&new_rule.r_path);
++out_rule: if (new_rule.r_path.dentry) path_put(&new_rule.r_path);
+           kfree(r_buf);
+           return err;
+ }
+@@ -1593,7 +1591,7 @@
+     unsigned long pg_off = offset_in_page(user_addr);
+     char *buf_ptr, *buf_end;
+ 
+-    if (pg_off + sizeof(*payload) > PAGE_SIZE || get_user_pages_fast(user_addr, 1, FOLL_WRITE, &page) != 1) 
++    if (pg_off + sizeof(*payload) > PAGE_SIZE || get_user_pages_fast(user_addr, 1, FOLL_WRITE, &page) != 1)
+         return -EFAULT;
+ 
+     if ((payload = (void *)((char *)kmap(page) + pg_off))->magic != NOMOUNT_MAGIC_SIG) {
+--- a/nomount.h
++++ b/nomount.h
+@@ -187,7 +187,7 @@
+ /* =====================================================================
+  * NoMount VFS Offset Protocol
+  * =====================================================================
+- * 64-bit layout: [ 16-bit 'nm' ][ 16-bit 0 ][ 32-bit ID ] 
++ * 64-bit layout: [ 16-bit 'nm' ][ 16-bit 0 ][ 32-bit ID ]
+  * 32-bit layout: [ 16-bit 'nm' ][ 16-bit ID ]
+  */
+ #define NM_SIG_16 0x6E6DULL /* "nm" in hex */

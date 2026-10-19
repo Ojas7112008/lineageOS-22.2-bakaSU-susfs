@@ -139,3 +139,23 @@ kernel/configs/android-*.cfg
 #Ignoring Android.bp link file
 #
 Android.bp
+
+# Local reproducible builds and read-only ROM diagnostics.
+/.backport-context/
+/artifacts/
+/out/
+/out-clang19/
+
+# Reviewed integration sources, despite the generic dot/patch exclusions.
+!.gitmodules
+!.github/
+.github/*
+!.github/patches/
+.github/patches/*
+!.github/patches/bakasu-devon-selinux-policy.patch
+!.github/patches/nomount-devon-4.19.patch
+!.github/workflows/
+.github/workflows/*
+!.github/workflows/build-lineage22-boot.yml
+!scripts/susfs/fixtures/*.patch
+/dist/

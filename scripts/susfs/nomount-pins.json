@@ -1,0 +1,23 @@
+{
+  "url": "https://github.com/maxsteeel/nomount.git",
+  "commit": "7046c7ad3ee0bf4ae66e80f6b93b1e30db0cb4e3",
+  "branch_at_selection": "master",
+  "license": "GPL-2.0 (kernel directory)",
+  "original_files": {
+    "nomount.h": "8a805e7fe3bbc6bf8daf2f4fd26c1f00d880a5480ca66dd013485509028146ed",
+    "Makefile": "ce9ca3ca442e6e30e3091168dbc1091a93d65dfbe0e93caf92d3a21be148779f",
+    "nomount.c": "b082476d72ee755e3549b850fd3cf1e233234b6440f3d844b5ea190e392e0c69",
+    "Kconfig": "1df7ad3589a282128f797f7a46b28aee315d080550aae26b681a898f11c7abc7"
+  },
+  "kernel_files": {
+    "fs/nomount/LICENSE": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+    "fs/nomount/nomount.h": "1f2b792b5f344db8fbbadad0a0f53b72aaf008ed33cc409720048ce5dfa40c25",
+    "fs/nomount/Makefile": "e3a5c9397bde0d844de5e0aea05c3ef2f46abbf20a1c6d5d195cf654aa6e6f1d",
+    "fs/nomount/nomount.c": "606bfaa4e8378841dd7988ffd6bfafa74af620147b9e4bfc9946fce7003e3fb5",
+    "fs/nomount/Kconfig": "b029fbb917114b3a2eb44436e48f9455d9c4e9e3d6bc665a947c6b9a4f3e9b32"
+  },
+  "adapter_patch": ".github/patches/nomount-devon-4.19.patch",
+  "adapter_sha256": "8b639ca22ad488ef627cdaa52a1b281330f5c2ce38f3fbf5cc8a546bc9465247",
+  "mode": "built-in only; ARM64 and KEYS required; CFI and strong stack protector retained",
+  "runtime_validation": "not performed"
+}

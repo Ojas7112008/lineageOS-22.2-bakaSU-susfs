@@ -1,0 +1,23 @@
+{
+  "toolchain": {
+    "url": "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/7143812acf96c9af445b164656ae7f424a67a573/clang-r536225.tar.gz",
+    "commit": "7143812acf96c9af445b164656ae7f424a67a573",
+    "revision": "r536225",
+    "build": "12701618",
+    "archive_sha256": "3eedf1e2498dccaf5e0278ca2b9d972bd1a25a5e559538b6ccc72baf6e2c8a3d",
+    "archive_name": "android-15-r536225-build12701618.tar.gz",
+    "metadata_name": "android-15-r536225-build12701618.archive.json",
+    "files": {
+      "bin/clang": "2603435cc1f030ded14648f6ad19c70fa640c9f4b53aad73a83321753571a4b5",
+      "bin/ld.lld": "f7eff2d893844d78fc27fad874c2ac3f1f0afce8430955b9327aed5a5a6e967a",
+      "bin/llvm-ar": "4217d998e5dc2cfaf04c802955cdf3af1aee9b3699a36b9fd9dd18d273b8099f",
+      "bin/llvm-nm": "c532d7ec193d93fb322da940b0eeea0aa5204f26ebedabf332d493c89765439b",
+      "bin/llvm-objcopy": "6dd7820310e2349581a5a450363daff5aebfa05aef740c0f700ad44310d06477",
+      "bin/llvm-strip": "6dd7820310e2349581a5a450363daff5aebfa05aef740c0f700ad44310d06477",
+      "bin/llvm-objdump": "74d807c725641fc740240de2fe829432dd594f119d07b3342f2cd55ec9cff0d9"
+    },
+    "git_tree": "2aa61960c3ad2f9f100b4d42a9631da72587325b",
+    "content_tree_sha256": "18ab81cf82af8a2b84be99abcef70ad645b662217a2e79385c413ee2bf41d30e",
+    "archive_sha256_note": "Observed transport hash; Gitiles tar timestamps vary. Every extracted file, mode and link must match the official Git tree and pinned SHA256 content tree before compiler execution."
+  }
+}

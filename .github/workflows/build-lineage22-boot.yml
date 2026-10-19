@@ -1,0 +1,68 @@
+name: LineageOS 22.2 BakaSU + SUSFS + NoMount boot.img
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lineage22-boot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Check out selected source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+
+      - name: Prepare runner
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /usr/local/.ghcup
+          sudo apt-get update
+          sudo apt-get install -y build-essential bc bison flex libssl-dev libelf-dev python3 python3-yaml clang lld gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi binutils-aarch64-linux-gnu zstd
+          df -h .
+
+      - name: Verify pinned compiler installer
+        run: python3 -B scripts/ci/test_toolchain_integrity.py
+
+      - name: Install original-ROM Android Clang 19
+        run: python3 -B scripts/ci/install_toolchain.py
+
+      - name: Prepare pinned test references
+        run: python3 -B scripts/susfs/prepare_test_references.py
+
+      - name: Build kernel, device trees and modules; verify original driver compatibility
+        id: kernel
+        env:
+          BUILD_JOBS: '4'
+        run: python3 -B scripts/ci/build_boot.py
+
+      - name: Run all host regressions and negative controls
+        run: python3 -B scripts/susfs/run_host_checks.py
+
+      - name: Validate workflow and boot packaging contracts
+        env:
+          BUILD_ARTIFACTS: ${{ steps.kernel.outputs.artifacts }}
+        run: python3 -B scripts/ci/test_boot_workflow.py --artifacts "$BUILD_ARTIFACTS"
+
+      - name: Repack original LineageOS 22.2 boot image
+        env:
+          BUILD_ARTIFACTS: ${{ steps.kernel.outputs.artifacts }}
+        run: python3 -B scripts/ci/boot_image.py --artifacts "$BUILD_ARTIFACTS"
+
+      - name: Upload boot image and checksum only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: lineage22.2-bakasu-susfs-nomount-boot-${{ github.run_number }}
+          path: |
+            dist/boot.img
+            dist/boot.img.sha256
+          if-no-files-found: error
+          retention-days: 7

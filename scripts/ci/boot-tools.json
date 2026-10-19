@@ -1,0 +1,14 @@
+{
+  "avbtool.py": {
+    "project": "platform/external/avb",
+    "commit": "761178607206f4cb2af79ed9eec52d8cbd814adb",
+    "url": "https://android.googlesource.com/platform/external/avb/+/761178607206f4cb2af79ed9eec52d8cbd814adb/avbtool.py?format=TEXT",
+    "sha256": "e5a664a38db623da00f080219bc0ee60a640a9dc4a872803616fae4938ac749b"
+  },
+  "unpack_bootimg.py": {
+    "project": "platform/system/tools/mkbootimg",
+    "commit": "d2bb0af5ba6d3198a3e99529c97eda1be0b5a093",
+    "url": "https://android.googlesource.com/platform/system/tools/mkbootimg/+/d2bb0af5ba6d3198a3e99529c97eda1be0b5a093/unpack_bootimg.py?format=TEXT",
+    "sha256": "a9d260978a63bd06a24b6347e7dee8a28ff96639793caea15dff6aa491316308"
+  }
+}
