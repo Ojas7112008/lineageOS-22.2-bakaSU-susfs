@@ -80,7 +80,7 @@ jobs:
       - name: Upload boot image and checksum only
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: lineage22.2-bakasu-susfs-nomount-boot-${{ steps.bakasu.outputs.short_commit }}-${{ github.run_number }}
+          name: output
           path: |
             dist/boot.img
             dist/boot.img.sha256

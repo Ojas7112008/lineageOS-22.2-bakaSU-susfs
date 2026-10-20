@@ -27,7 +27,8 @@ preserving the original ramdisk, header settings and AVB verification flags.
 It rejects other ROM images. It never flashes a device or publishes generated
 kernels as releases. The release asset is only the original build input.
 
-The selected full BakaSU commit appears in the run summary and artifact name.
+The selected full BakaSU commit appears in the run summary.
+The artifact downloads as **`output.zip`**.
 It is resolved once per run and remains the same through tests and packaging.
 Future updates must descend from the reviewed `10cada74` base and accept the
 exact compatibility patch. A conflict or failed check stops the run; there is

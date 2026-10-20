@@ -192,7 +192,8 @@ Each selected source has its own immutable clean reference and patched build
 dependency. A per-run selection binds the static pin/policy checksums. Only
 the known relative `drivers/kernelsu` symlink changes during selection; other
 kernel files and validated references stay intact. The exact source revision
-appears in the run summary and artifact name. Download contents stay limited
+appears in the run summary. The artifact is named `output` and downloads as
+`output.zip`. Download contents stay limited
 to `boot.img` and `boot.img.sha256`. Latest-source compilation and offline
 validation do not prove that a particular update boots on a device.
 
