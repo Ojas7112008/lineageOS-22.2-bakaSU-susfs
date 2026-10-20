@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Actual access/stat and filename source under host mocks; no ARM64/kernel runtime proof."""
 import json
+from bakasu_source import reference_dir, build_pins
 from pathlib import Path
 import re
 from kernel_baseline import kernel_source, bakasu_source
@@ -15,12 +16,12 @@ from source_guards import without_feature_guards
 
 def main():
     root = Path(__file__).resolve().parents[2]
-    ref = root / ".backport-context/repos/bakasu-sync-susfs"
+    ref = reference_dir()
     assert run(["git", "-C", str(ref), "rev-parse", "HEAD"]).strip() == PIN
     assert not run(["git", "-C", str(ref), "status", "--porcelain"])
     output = root / ".backport-context/audit/access-stat"
     output.mkdir(parents=True, exist_ok=True)
-    patch = root / ".github/patches/bakasu-devon-selinux-policy.patch"
+    patch = root / build_pins()["provider_patch"]
     fixture = root / "scripts/susfs/test_access_stat.c"
     results = {"pin": PIN, "scope": __doc__, "compiler": run(["clang", "--version"]).splitlines()[0], "runs": []}
     with tempfile.TemporaryDirectory(prefix="devon-access-stat-") as directory:

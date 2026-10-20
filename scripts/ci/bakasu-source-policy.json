@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "upstream_url": "https://github.com/Baka-SU/BakaSU.git",
+  "branch": "sync-susfs",
+  "latest_base_commit": "10cada74698ccf7eed04d0e38bc7d624e5f54395",
+  "provider_patch": ".github/patches/bakasu-devon-selinux-policy-10cada74.patch",
+  "provider_sha256": "c04f6fe1ff7f15d38d0851462d89d5481a40dbf8a1346ebfa37ef55efecfeca1",
+  "provider_files": {
+    "kernel/Kbuild": "66619b93f30732c82a17d52d53cfb2e6076605b191ddc00608a9b4e7b7cab6e2",
+    "kernel/Kconfig": "ee2ec621e3a6011bae159ca6b86ce9d82a251ecf4861dc64f88599d21e3b10f5",
+    "kernel/core/init.c": "571f169dee48815ba286593344c6ffda700336d599f98b36ed2468faeea6a84f",
+    "kernel/feature/selinux_hide.c": "99b1b7349aa9582d5e8646505c7ce70a17a26b2c197808a543febfdd9b2ea18f",
+    "kernel/feature/selinux_hide.h": "63bfe72ea86c044367f0f074cc20111fbdfe001d7b2331d712415758a09139ae",
+    "kernel/feature/sucompat.c": "0f9a30296e4702acb6b47527f5b34674b1c1874e683611cff946e22f9a5246ed",
+    "kernel/feature/sucompat.h": "a20379bdb56cfbaeadd5ac88b312c3cc99d121e63e3e12675d104e2b6646b178",
+    "kernel/hook/setuid_hook.c": "d9ad20d5b7f9c63d2c76f3e10d29e2fc3b40644e7d68850b78b8d578311996e6",
+    "kernel/hook/setuid_hook.h": "b61f4e09a2237a3d586e6ae757b77357c0246fe95409a446c1639f69ae850465",
+    "kernel/include/ksu.h": "15742116dfa97f739217e934a62de5c616529130dcfeb86e31bb5198d02a9dd6",
+    "kernel/runtime/ksud_integration.c": "042f5e8ed6557bbb9979de0110f7f4595087901b573caeff3556075cd4041fba",
+    "kernel/selinux/rules.c": "1851263d0730958db7e7a0460581d59736977c831389e466b65b98b5e064be54",
+    "kernel/selinux/selinux.c": "5441d6e96b142da42094dc8b0ddb5be4ad66002d9a9d7333931d907933f06566",
+    "kernel/selinux/selinux.h": "43c93d183fd391ada62c3ef3f19e2a37b5d605983eddfb674bd5e2e9295fc81b",
+    "kernel/selinux/sepolicy.c": "6020847dbf161b774ce4434603eac2622a65d75fbf4ba07a0e817eb5626b88d3"
+  },
+  "scope": "Reviewed 4.19 adaptation; latest descendants must accept this exact patch. The validated option retains build-pins.json."
+}

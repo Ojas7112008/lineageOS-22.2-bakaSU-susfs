@@ -5,6 +5,7 @@ This reconstructs the entire provider patch. It does not build or boot a kernel,
 run real seccomp/VFS operations, or prove complete SUSFS command compatibility.
 """
 import json
+from bakasu_source import reference_dir, build_pins
 from pathlib import Path
 import re
 from kernel_baseline import kernel_source
@@ -27,12 +28,12 @@ def section(text, marker):
 
 def main():
     root = Path(__file__).resolve().parents[2]
-    ref = root / ".backport-context/repos/bakasu-sync-susfs"
+    ref = reference_dir()
     assert run(["git", "-C", str(ref), "rev-parse", "HEAD"]).strip() == PIN
     assert not run(["git", "-C", str(ref), "status", "--porcelain"])
     output = root / ".backport-context/audit/setresuid-task-state"
     output.mkdir(parents=True, exist_ok=True)
-    patch = root / ".github/patches/bakasu-devon-selinux-policy.patch"
+    patch = root / build_pins()["provider_patch"]
     fixture = root / "scripts/susfs/test_setresuid_task_state.c"
     results = {"pin": PIN, "scope": __doc__, "compiler": run(["clang", "--version"]).splitlines()[0], "runs": []}
     with tempfile.TemporaryDirectory(prefix="devon-uid-") as temporary:

@@ -20,6 +20,7 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(ROOT / 'scripts/ci'))
 from toolchain_integrity import prepare_toolchain
 PINS_FILE = ROOT / 'scripts/susfs/build-pins.json'
+from bakasu_source import build_pins, pins_bytes, reference_dir
 FEATURE_OBJECTS = {
     'SUS_PATH': ['susfs_path.o', 'susfs_fuse.o'],
     'SUS_MOUNT': ['susfs_mount.o'],
@@ -137,7 +138,7 @@ def prepare_dependency(pins):
     repo = ROOT / pins['dependency_directory']
     if not repo.exists():
         repo.parent.mkdir(parents=True, exist_ok=True)
-        reference = ROOT / '.backport-context/repos/bakasu-sync-susfs'
+        reference = reference_dir()
         source = str(reference) if reference.exists() else pins['bakasu_url']
         run(['git', 'clone', '--no-hardlinks', '--no-checkout', source, str(repo)])
         run(['git', 'remote', 'set-url', 'origin', pins['bakasu_url']], cwd=repo)
@@ -270,7 +271,7 @@ def save_result(artifacts, record):
 
 
 def main():
-    pins = json.loads(PINS_FILE.read_text())
+    pins = build_pins()
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--prepare', action='store_true', help='Verify dependencies, configure and run Kbuild checks (default)')
@@ -328,7 +329,7 @@ def main():
     versions = {name: run([name, '--version']).splitlines()[0] for name in
                 ['make', 'gcc', 'aarch64-linux-gnu-gcc', 'arm-linux-gnueabi-gcc', 'bison', 'flex', 'readelf']}
     (artifacts / 'host-tool-versions.json').write_text(json.dumps(versions, indent=2) + '\n')
-    (artifacts / 'build-pins.json').write_bytes(PINS_FILE.read_bytes())
+    (artifacts / 'build-pins.json').write_bytes(pins_bytes())
     (artifacts / 'build-driver.py').write_bytes(Path(__file__).read_bytes())
     # Include untracked reviewed inputs too; a Git diff alone can omit them.
     with tarfile.open(artifacts / 'kernel-inputs.tar.gz', 'w:gz') as bundle:

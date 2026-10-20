@@ -13,15 +13,11 @@ import subprocess
 import tempfile
 from test_selinux_adapter import function, run, digest
 
-PIN = "f308ed0936bdd31163cb53da3f42bc7a698f5512"
+from bakasu_source import build_pins, source_pins, reference_dir
+PIN = build_pins()["bakasu_commit"]
 MACRO = "KSU_COMPAT_DEVON_SELINUX_POLICY"
-PATCH_FILES = ["kernel/Kbuild", "kernel/Kconfig", "kernel/feature/selinux_hide.c",
-               "kernel/feature/selinux_hide.h", "kernel/selinux/rules.c",
-               "kernel/selinux/selinux.h", "kernel/runtime/ksud_integration.c",
-               "kernel/selinux/sepolicy.c", "kernel/tools/kernel_compat.mk",
-               "kernel/core/init.c", "kernel/include/ksu.h", "kernel/selinux/selinux.c",
-               "kernel/hook/setuid_hook.c", "kernel/hook/setuid_hook.h",
-               "kernel/feature/sucompat.c", "kernel/feature/sucompat.h"]
+PATCH_FILES = list(build_pins()["provider_files"])
+
 
 def gate(fragment, output, name):
     result = subprocess.run(["make", "--no-print-directory", "-f", "-", "all"],
@@ -35,10 +31,10 @@ def main():
     parser.add_argument("--cc", default="clang")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[2]
-    pins = json.loads((root / "scripts/susfs/source-pins.json").read_text())
+    pins = source_pins()
     assert pins["bakasu"] == PIN
     assert pins["bakasu_patch_files"] == len(PATCH_FILES)
-    ref = root / ".backport-context/repos/bakasu-sync-susfs"
+    ref = reference_dir()
     assert run(["git", "-C", str(ref), "rev-parse", "HEAD"]).strip() == PIN
     assert not run(["git", "-C", str(ref), "status", "--porcelain"])
     # Native Motorola SELinux operations belong to BakaSU's automatic route.
@@ -50,12 +46,14 @@ def main():
     results = {"bakasu_pin": PIN, "scope": __doc__, "compiler": run([args.cc, "--version"]).splitlines()[0], "runs": []}
     with tempfile.TemporaryDirectory(prefix="devon-auto-selinux-") as directory:
         work = Path(directory)
-        for name in PATCH_FILES:
+        # The latest upstream already supplies this unchanged API probe.
+        test_files = sorted(set(PATCH_FILES) | {"kernel/tools/kernel_compat.mk"})
+        for name in test_files:
             dest = work / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_text(run(["git", "-C", str(ref), "show", PIN + ":" + name]))
         run(["git", "init", "--quiet"], cwd=work)
-        run(["git", "add", "--", *PATCH_FILES], cwd=work)
+        run(["git", "add", "--", *test_files], cwd=work)
         run(["git", "apply", "--check", "--whitespace=error-all", str(patch)], cwd=work)
         run(["git", "apply", "--whitespace=error-all", str(patch)], cwd=work)
         assert sorted(run(["git", "diff", "--name-only"], cwd=work).splitlines()) == sorted(PATCH_FILES)

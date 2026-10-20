@@ -171,3 +171,35 @@ build successfully with the updated provider. All 12,489 baseline exports,
 4,306 original imports, 66 original module signatures, native hook calls and
 20 maintained host suites pass. Cloud validation is recorded in the Actions
 run; boot and rule testing remain separate.
+
+## Latest-provider workflow — 2026-10-20
+
+Actions now defaults to the official BakaSU `sync-susfs` branch, resolved once
+to a full commit. The `validated` input retains the original `f308ed09` source
+and its 16-file adapter. Static build/source pins are preserved.
+
+Latest mode uses a separately reviewed 15-file adapter based on
+`10cada74698ccf7eed04d0e38bc7d624e5f54395`. The upstream context-hash probe is
+now native and no longer needs a local patch. Upstream 32-bit syscall support
+is retained. Expected patched blobs are derived from the selected upstream
+commit and the exact reviewed patch in an isolated temporary Git index, not
+from the mutable build dependency. Descendants must retain ancestry, accept
+strict application and pass the same host, ARM64, vendor-import, signature
+and complete-export gates before packaging. No three-way repair, silent
+fallback, compatibility-check bypass or version override runs in CI.
+
+Each selected source has its own immutable clean reference and patched build
+dependency. A per-run selection binds the static pin/policy checksums. Only
+the known relative `drivers/kernelsu` symlink changes during selection; other
+kernel files and validated references stay intact. The exact source revision
+appears in the run summary and artifact name. Download contents stay limited
+to `boot.img` and `boot.img.sha256`. Latest-source compilation and offline
+validation do not prove that a particular update boots on a device.
+
+Local validation of `10cada74` completed: native version 35241 /
+`v4.2.0-rc3-10cada74-dirty`; all-eight-feature Image, device trees and modules
+compiled. All 20 maintained host suites and dedicated core/path checks pass.
+All 12,489 original exports, 66 vendor signatures and 4,306 imports pass with
+no mismatches. Full repacking against the checksum-pinned original boot image
+and negative packaging/source-selection controls pass. No device boot was
+attempted for this revision.

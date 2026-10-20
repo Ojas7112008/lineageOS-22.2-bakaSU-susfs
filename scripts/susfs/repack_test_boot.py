@@ -8,6 +8,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+from bakasu_source import build_pins, pins_bytes
 import os
 from pathlib import Path
 import subprocess
@@ -23,7 +24,7 @@ def require(condition, message):
 
 
 def main():
-    pins = json.loads(PINS_FILE.read_text())
+    pins = build_pins()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--base', required=True, type=Path)
     parser.add_argument('--artifacts', required=True, type=Path)

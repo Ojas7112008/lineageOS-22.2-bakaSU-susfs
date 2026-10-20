@@ -27,9 +27,19 @@ def workflow_contract():
     workflow = yaml.load((ROOT / '.github/workflows/build-lineage22-boot.yml').read_text(),
                          Loader=yaml.BaseLoader)
     assert list(workflow['on']) == ['workflow_dispatch']
+    choice = workflow['on']['workflow_dispatch']['inputs']['bakasu_source']
+    assert choice['type'] == 'choice' and choice['default'] == 'latest'
+    assert choice['options'] == ['latest', 'validated']
+    assert workflow['jobs']['build']['env']['BAKASU_SELECTION_FILE'] == (
+        '${{ github.workspace }}/.backport-context/ci-bakasu-selection.json')
     assert workflow['permissions'] == {'contents': 'read'}
     pins = json.loads((ROOT / 'scripts/susfs/build-pins.json').read_text())
     steps = workflow['jobs']['build']['steps']
+    select = next(index for index, step in enumerate(steps) if step.get('id') == 'bakasu')
+    assert steps[select]['env']['BAKASU_SOURCE'] == '${{ inputs.bakasu_source }}'
+    assert steps[select]['run'] == 'python3 -B scripts/ci/select_bakasu.py --mode "$BAKASU_SOURCE"'
+    assert select < next(index for index, step in enumerate(steps)
+                         if step.get('run') == 'python3 -B scripts/susfs/prepare_test_references.py')
     actions = [step['uses'] for step in steps if 'uses' in step]
     assert actions == ['actions/checkout@' + pins['actions']['checkout'],
                        'actions/upload-artifact@' + pins['actions']['upload-artifact']]
@@ -57,7 +67,7 @@ def main():
         fixture.mkdir()
         # Large, immutable outputs are shared read-only; edited evidence is copied.
         editable = {'result.json', 'SHA256SUMS.json', 'vendor-abi-result.json',
-                    'baseline-exports-result.json'}
+                    'baseline-exports-result.json', 'build-pins.json'}
         for source in artifacts.iterdir():
             if source.is_file():
                 target = fixture / source.name
@@ -82,6 +92,9 @@ def main():
 
         change_json('result.json', 'profile', 'core')
         rejected(lambda: boot_image.checked_build(fixture), 'all-feature build')
+        restore()
+        change_json('build-pins.json', 'bakasu_commit', '0' * 40, True)
+        rejected(lambda: boot_image.checked_build(fixture), 'Build and packaging source pins differ')
         restore()
         change_json('vendor-abi-result.json', 'checked_imports', 0)
         rejected(lambda: boot_image.checked_build(fixture), 'Build artifact changed')

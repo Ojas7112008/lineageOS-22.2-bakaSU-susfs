@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts/susfs'))
 from axion_boot_layout import parse_boot, repack_bytes
 from build_test import check_source, check_dependency, verify_config
+from bakasu_source import build_pins, pins_bytes
 from run_host_checks import TESTS
 
 
@@ -91,8 +92,8 @@ def checked_build(artifacts):
     required = ['Image', 'kernel.config', 'build-pins.json', 'vendor-abi-result.json',
                 'baseline-exports-result.json', 'vendor-signature-result.json', 'native-call-result.json']
     require(set(required) <= checksums.keys(), 'Required build evidence is missing')
-    pins = json.loads((ROOT / 'scripts/susfs/build-pins.json').read_text())
-    require(digest(artifacts / 'build-pins.json') == digest(ROOT / 'scripts/susfs/build-pins.json'),
+    pins = build_pins()
+    require(digest(artifacts / 'build-pins.json') == hashlib.sha256(pins_bytes()).hexdigest(),
             'Build and packaging source pins differ')
     check_source(pins)
     check_dependency(ROOT / pins['dependency_directory'], pins)
@@ -107,7 +108,7 @@ def checked_build(artifacts):
     require(exports['baseline_exports'] == 12489 and not exports['changed_or_missing'],
             'Original export versions differ')
     host = json.loads((ROOT / '.backport-context/audit/ci-host-checks/results.json').read_text())
-    require(host['build_pins_sha256'] == digest(ROOT / 'scripts/susfs/build-pins.json'),
+    require(host['build_pins_sha256'] == hashlib.sha256(pins_bytes()).hexdigest(),
             'Host tests used different build inputs')
     require(sorted(item['test'] for item in host['checks']) == sorted(TESTS) and
             all(item['exit'] == 0 for item in host['checks']), 'Host checks did not all pass')

@@ -5,6 +5,7 @@ The production aggregate still rejects SUS_PATH until lookup/readdir consumers
 are ported. This test does not relax that guard or build a kernel object/image.
 """
 import json
+from bakasu_source import reference_dir, build_pins
 from pathlib import Path
 import re
 import subprocess
@@ -19,7 +20,7 @@ SUSFS_PIN = "82f08351fadb8b19dd6591bd14634d02ad832145"
 
 def main():
     root = Path(__file__).resolve().parents[2]
-    ref = root / ".backport-context/repos/bakasu-sync-susfs"
+    ref = reference_dir()
     susfs = root / ".backport-context/repos/susfs"
     for repo, pin in [(ref, PIN), (susfs, SUSFS_PIN)]:
         assert run(["git", "-C", str(repo), "rev-parse", "HEAD"]).strip() == pin

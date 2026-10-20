@@ -3,6 +3,7 @@
 """Reject driver-trust, compiler-mode and hook configuration regressions."""
 import copy
 import json
+from bakasu_source import build_pins, pins_bytes
 from pathlib import Path
 import tempfile
 from build_test import verify_config, check_dependency, ROOT
@@ -10,7 +11,7 @@ from check_kernel_exports import compare
 
 
 def main():
-    pins = json.loads((ROOT / 'scripts/susfs/build-pins.json').read_text())
+    pins = build_pins()
     latest = sorted((ROOT / 'artifacts/lineage22-susfs-nomount-all').glob('*/kernel.config'))[-1]
     text = latest.read_text()
     verify_config(text, pins, 'all')

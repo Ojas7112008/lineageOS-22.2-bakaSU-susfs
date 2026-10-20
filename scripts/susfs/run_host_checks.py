@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0
 """Run maintained host models and target ABI probes; no device safety claim."""
 import json
+from bakasu_source import pins_bytes
 import hashlib
 from pathlib import Path
 import subprocess
@@ -23,8 +24,7 @@ TESTS = [
 
 
 def main():
-    pins_file = ROOT / 'scripts/susfs/build-pins.json'
-    pins_digest = hashlib.sha256(pins_file.read_bytes()).hexdigest()
+    pins_digest = hashlib.sha256(pins_bytes()).hexdigest()
     out = ROOT / '.backport-context/audit/ci-host-checks'
     out.mkdir(parents=True, exist_ok=True)
     results = []
@@ -36,7 +36,7 @@ def main():
         print(('PASS ' if p.returncode == 0 else 'FAIL ') + name, flush=True)
         if p.returncode:
             print((p.stdout + p.stderr)[-3500:], flush=True)
-    if hashlib.sha256(pins_file.read_bytes()).hexdigest() != pins_digest:
+    if hashlib.sha256(pins_bytes()).hexdigest() != pins_digest:
         raise ValueError('Build pins changed while host tests were running')
     (out / 'results.json').write_text(json.dumps({'scope': __doc__, 'checks': results,
         'build_pins_sha256': pins_digest, 'test_scripts': {name: hashlib.sha256(

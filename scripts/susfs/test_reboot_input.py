@@ -5,6 +5,7 @@ No real reboot, kernel text patching, ARM64 build or device input runs here.
 The SUSFS dispatcher and fd allocator are mocked; payload ABI is a later gate.
 """
 import json
+from bakasu_source import reference_dir, build_pins
 from pathlib import Path
 import re
 from kernel_baseline import kernel_source, bakasu_source
@@ -19,12 +20,12 @@ from test_setresuid_task_state import section
 
 def main():
     root = Path(__file__).resolve().parents[2]
-    ref = root / ".backport-context/repos/bakasu-sync-susfs"
+    ref = reference_dir()
     assert run(["git", "-C", str(ref), "rev-parse", "HEAD"]).strip() == PIN
     assert not run(["git", "-C", str(ref), "status", "--porcelain"])
     out = root / ".backport-context/audit/reboot-input"
     out.mkdir(parents=True, exist_ok=True)
-    patch = root / ".github/patches/bakasu-devon-selinux-policy.patch"
+    patch = root / build_pins()["provider_patch"]
     results = {"pin": PIN, "scope": __doc__, "compiler": run(["clang", "--version"]).splitlines()[0], "runs": []}
     with tempfile.TemporaryDirectory(prefix="devon-reboot-input-") as directory:
         work = Path(directory)

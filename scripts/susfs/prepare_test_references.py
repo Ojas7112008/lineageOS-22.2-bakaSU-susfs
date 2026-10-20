@@ -6,7 +6,8 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
-PINS = json.loads((ROOT / 'scripts/susfs/build-pins.json').read_text())
+from bakasu_source import build_pins, reference_dir
+PINS = build_pins()
 
 
 def run(args, cwd=ROOT):
@@ -40,5 +41,5 @@ def prepare(name, url, commit, full=False):
 
 
 if __name__ == '__main__':
-    prepare('bakasu-sync-susfs', PINS['bakasu_url'], PINS['bakasu_commit'], full=True)
+    prepare(reference_dir().name, PINS['bakasu_url'], PINS['bakasu_commit'], full=True)
     prepare('susfs', 'https://github.com/ShirkNeko/susfs4ksu.git', PINS['susfs_reference'])

@@ -4,6 +4,7 @@
 Does not compile a kernel object, run actual fsnotify/VFS/workqueues, or boot devon.
 """
 import json
+from bakasu_source import reference_dir, build_pins
 from pathlib import Path
 import re
 from kernel_baseline import kernel_source
@@ -19,7 +20,7 @@ SUSFS_PIN = "82f08351fadb8b19dd6591bd14634d02ad832145"
 
 def main():
     root = Path(__file__).resolve().parents[2]
-    ref = root / ".backport-context/repos/bakasu-sync-susfs"
+    ref = reference_dir()
     susfs = root / ".backport-context/repos/susfs"
     for repo, pin in [(ref, PIN), (susfs, SUSFS_PIN)]:
         assert run(["git", "-C", str(repo), "rev-parse", "HEAD"]).strip() == pin
@@ -103,7 +104,7 @@ def main():
     results["rejections"] = "absent FSNOTIFY and original modern ops fail compilation; feature-specific consumers have separate suites"
     results["abi"] = validate_abi(root, out, susfs, ref)
     # Preserve unchanged external provider; startup consumers already call these entry points.
-    init = root / json.loads((root / 'scripts/susfs/build-pins.json').read_text())['dependency_directory'] / 'kernel/core/init.c'
+    init = root / build_pins()['dependency_directory'] / 'kernel/core/init.c'
     assert "susfs_init();" in section(init.read_text(), "static inline void __init ksu_hook_init(")
     event = function(dispatch, "do_report_event")
     assert "on_boot_completed();" in event and "susfs_start_sdcard_monitor_fn();" in event
@@ -113,7 +114,7 @@ def main():
               root / "include/linux/overflow.h", root / "include/linux/susfs_def.h", root / "include/linux/ksu_susfs.h", root / "include/linux/fsnotify_backend.h",
               root / "fs/notify/mark.c", root / "fs/notify/group.c", ref / "kernel/supercall/dispatch.c",
               ref / "kernel/supercall/supercall.c", ref / "uapi/supercall.h", susfs / "kernel_patches/fs/susfs.c",
-              susfs / "kernel_patches/include/linux/susfs.h", init, root / ".github/patches/bakasu-devon-selinux-policy.patch"]
+              susfs / "kernel_patches/include/linux/susfs.h", init, root / build_pins()["provider_patch"]]
     inputs += [susfs / "ksu_susfs/jni/features" / name for name in ["show.c", "enable_log.c", "avc_log_spoofing.c"]]
     inputs += [ref / "userspace/ksud/src/android/susfs/api/features" / name for name in ["show.rs", "enable_log.rs", "avc_spoofing.rs"]]
     results["inputs"] = {str(p.relative_to(root)): digest(p) for p in inputs}

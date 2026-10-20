@@ -4,6 +4,7 @@ import argparse
 import copy
 import io
 import json
+from bakasu_source import build_pins, pins_bytes
 import os
 from pathlib import Path
 import struct
@@ -31,7 +32,7 @@ def main():
     args = parser.parse_args()
     out = ROOT / '.backport-context/audit/all-features/build-preparation' / args.profile
     out.mkdir(parents=True, exist_ok=True)
-    pins = json.loads(PINS_FILE.read_text())
+    pins = build_pins()
     config = (args.artifacts / 'kernel.config').read_text()
     profile = args.profile
     required = profile_config(pins, profile)
