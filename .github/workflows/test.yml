@@ -1,0 +1,144 @@
+name: Build LineageOS 22.2 Kernel (BakaSU + SuSFS)
+
+on:
+  workflow_dispatch:
+    inputs:
+      kernel_branch:
+        description: 'LineageOS Kernel Branch'
+        required: true
+        default: 'lineage-22.2'
+      ksu_repo:
+        description: 'KSU Repository URL (BakaSU / ReSukiSU)'
+        required: true
+        default: 'https://github.com/ReSukiSU/ReSukiSU'
+      ksu_branch:
+        description: 'KSU Branch or Tag'
+        required: true
+        default: 'main'
+      enable_susfs:
+        description: 'Integrate SuSFS (kernel-4.19)'
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  ARCH: arm64
+  SUBARCH: arm64
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_MAXSIZE: 5G
+  DEFCONFIG: vendor/bengal-perf_defconfig
+
+jobs:
+  build:
+    name: Compile Kernel (devon)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            bc bison build-essential ccache curl flex git \
+            libelf-dev libssl-dev lld llvm python3 python-is-python3 \
+            lz4 xz-utils zip zstd device-tree-compiler cpio
+
+      - name: Restore ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: sm6225-${{ inputs.kernel_branch }}
+          max-size: 5G
+
+      - name: Clone Kernel Source
+        run: |
+          git clone --depth=1 -b "${{ inputs.kernel_branch }}" \
+            https://github.com/LineageOS/android_kernel_motorola_sm6225.git kernel
+
+      - name: Clone AOSP Clang & GCC Toolchains
+        run: |
+          mkdir -p clang gcc64 gcc32
+          curl -sL https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r416183b.tar.gz | tar -xzf - -C clang
+          git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git gcc64
+          git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git gcc32
+
+      - name: Integrate KernelSU (BakaSU / ReSukiSU)
+        working-directory: kernel
+        run: |
+          curl -LSs "${{ inputs.ksu_repo }}/raw/${{ inputs.ksu_branch }}/kernel/setup.sh" | bash -s "${{ inputs.ksu_branch }}"
+
+      - name: Integrate SuSFS (kernel-4.19)
+        if: ${{ inputs.enable_susfs }}
+        working-directory: kernel
+        run: |
+          git clone --depth=1 -b kernel-4.19 https://gitlab.com/simonpunk/susfs4ksu.git /tmp/susfs4ksu
+          cp -r /tmp/susfs4ksu/kernel_patches/fs/* fs/
+          cp -r /tmp/susfs4ksu/kernel_patches/include/linux/* include/linux/
+          # Apply 4.19 SuSFS patch to kernel tree
+          patch -p1 --forward --fuzz=3 < /tmp/susfs4ksu/kernel_patches/50_add_susfs_in_kernel-4.19.patch || true
+
+      - name: Merge Devon Defconfig & KSU/SuSFS Flags
+        working-directory: kernel
+        run: |
+          TARGET_CFG="arch/arm64/configs/${DEFCONFIG}"
+          printf "\n" >> "${TARGET_CFG}"
+          cat arch/arm64/configs/vendor/ext_config/moto-bengal.config >> "${TARGET_CFG}"
+          printf "\n" >> "${TARGET_CFG}"
+          cat arch/arm64/configs/vendor/ext_config/devon-default.config >> "${TARGET_CFG}"
+
+          cat << 'EOF' >> "${TARGET_CFG}"
+
+          # KernelSU & SuSFS Configuration
+          CONFIG_KPROBES=y
+          CONFIG_HAVE_KPROBES=y
+          CONFIG_KPROBE_EVENTS=y
+          CONFIG_KSU=y
+          CONFIG_KSU_SUSFS=y
+          CONFIG_KSU_SUSFS_SUS_PATH=y
+          CONFIG_KSU_SUSFS_SUS_MOUNT=y
+          CONFIG_KSU_SUSFS_SUS_KSTAT=y
+          CONFIG_KSU_SUSFS_SUS_OVERLAYFS=y
+          CONFIG_KSU_SUSFS_TRY_UMOUNT=y
+          CONFIG_KSU_SUSFS_SPOOF_UNAME=y
+          CONFIG_KSU_SUSFS_ENABLE_LOG=y
+          CONFIG_KSU_SUSFS_OPEN_REDIRECT=y
+          EOF
+
+      - name: Compile Kernel
+        working-directory: kernel
+        run: |
+          export PATH="${GITHUB_WORKSPACE}/clang/bin:${GITHUB_WORKSPACE}/gcc64/bin:${GITHUB_WORKSPACE}/gcc32/bin:${PATH}"
+          make O=out "${DEFCONFIG}"
+          make -j"$(nproc --all)" O=out \
+            CC="ccache clang" \
+            LLVM=1 \
+            LLVM_IAS=1 \
+            CLANG_TRIPLE=aarch64-linux-gnu- \
+            CROSS_COMPILE=aarch64-linux-android- \
+            CROSS_COMPILE_ARM32=arm-linux-androideabi-
+
+      - name: Package with AnyKernel3
+        run: |
+          git clone --depth=1 https://github.com/osm0sis/AnyKernel3.git AnyKernel3
+          rm -rf AnyKernel3/.git
+          cp kernel/out/arch/arm64/boot/Image.gz AnyKernel3/ || cp kernel/out/arch/arm64/boot/Image AnyKernel3/
+          if [ -f kernel/out/arch/arm64/boot/dtbo.img ]; then
+            cp kernel/out/arch/arm64/boot/dtbo.img AnyKernel3/
+          fi
+          sed -i 's/device.name1=.*/device.name1=devon/' AnyKernel3/anykernel.sh
+          sed -i 's/do.devicecheck=1/do.devicecheck=0/' AnyKernel3/anykernel.sh
+          sed -i 's|block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;|block=auto;|' AnyKernel3/anykernel.sh
+          sed -i 's/is_slot_device=0;/is_slot_device=1;/' AnyKernel3/anykernel.sh
+          cd AnyKernel3
+          zip -r9 "${GITHUB_WORKSPACE}/LineageOS-22.2-devon-BakaSU-SuSFS-$(date +%Y%m%d).zip" * -x .git README.md *placeholder
+
+      - name: Upload Flashable Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kernel-devon-BakaSU-SuSFS
+          path: "${{ github.workspace }}/*.zip"
